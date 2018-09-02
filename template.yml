@@ -1,0 +1,100 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: unzip uploaded zip file to another S3 bucket
+Resources:
+  WriteExtLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: artifact/write_ext
+      Handler: write_ext
+      Runtime: go1.x
+      Timeout: 10
+      Tracing: Active
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt ForExtLambdaQueue.Arn
+            BatchSize: 10
+
+  WriteFileNameLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: artifact/write_file_name
+      Handler: write_file_name
+      Runtime: go1.x
+      Timeout: 10
+      Tracing: Active
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt ForFileNameLambdaQueue.Arn
+            BatchSize: 10
+
+  NotifierLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: artifact/notifier
+      Handler: notifier
+      Runtime: go1.x
+      Timeout: 10
+      Tracing: Active
+      Events:
+        SNSEvent:
+          Type: SNS
+          Properties:
+            Topic:
+              Ref: S3FileTopic
+
+  SQSLambdaSample:
+    Type: AWS::S3::Bucket
+    DependsOn: S3FileTopic
+    Properties:
+      BucketName: sqs-sns-lambda-sample
+      NotificationConfiguration:
+        TopicConfigurations:
+        - Topic: !Ref S3FileTopic
+          Event: s3:ObjectCreated:Put
+
+  ForExtLambdaQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 20
+
+  ForFileNameLambdaQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 20
+
+  S3FileTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint:
+            Fn::GetAtt:
+              - "ForExtLambdaQueue"
+              - "Arn"
+          Protocol: "sqs"
+        - Endpoint:
+            Fn::GetAtt:
+              - "ForFileNameLambdaQueue"
+              - "Arn"
+          Protocol: "sqs"
+      TopicName: "lambda"
+  SNSTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref S3FileTopic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: sns:Publish
+            Resource: !Ref S3FileTopic
+            Condition:
+              ArnLike:
+                aws:SourceArn: !Sub "arn:aws:s3:::sqs-sns-lambda-sample"
+            Principal:
+              AWS: '*'
