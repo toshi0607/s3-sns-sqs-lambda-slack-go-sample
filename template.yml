@@ -49,7 +49,7 @@ Resources:
 
   SQSLambdaSample:
     Type: AWS::S3::Bucket
-    DependsOn: S3FileTopic
+    DependsOn: SNSTopicPolicy
     Properties:
       BucketName: sqs-sns-lambda-sample
       NotificationConfiguration:
@@ -66,22 +66,33 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: 20
+  SQSPolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          Effect: Allow
+          Principal: "*"
+          Action: sqs:*
+          Resource: "*"
+          Condition:
+            StringEquals:
+              aws:SourceArn:
+              - !Ref S3FileTopic
+      Queues:
+      - !Ref ForExtLambdaQueue
+      - !Ref ForFileNameLambdaQueue
 
   S3FileTopic:
     Type: AWS::SNS::Topic
     Properties:
       Subscription:
-        - Endpoint:
-            Fn::GetAtt:
-              - "ForExtLambdaQueue"
-              - "Arn"
-          Protocol: "sqs"
-        - Endpoint:
-            Fn::GetAtt:
-              - "ForFileNameLambdaQueue"
-              - "Arn"
-          Protocol: "sqs"
-      TopicName: "lambda"
+        - Endpoint: !GetAtt [ForExtLambdaQueue, Arn]
+          Protocol: sqs
+        - Endpoint: !GetAtt [ForFileNameLambdaQueue, Arn]
+          Protocol: sqs
+      TopicName: s3-file-topic
   SNSTopicPolicy:
     Type: AWS::SNS::TopicPolicy
     Properties:
