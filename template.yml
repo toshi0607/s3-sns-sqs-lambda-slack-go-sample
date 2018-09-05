@@ -5,7 +5,7 @@ Resources:
   WriteExtLambda:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: artifact/write_ext
+      CodeUri: artifact
       Handler: write_ext
       Runtime: go1.x
       Timeout: 10
@@ -20,7 +20,7 @@ Resources:
   WriteFileNameLambda:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: artifact/write_file_name
+      CodeUri: artifact
       Handler: write_file_name
       Runtime: go1.x
       Timeout: 10
@@ -35,7 +35,7 @@ Resources:
   NotifierLambda:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: artifact/notifier
+      CodeUri: artifact
       Handler: notifier
       Runtime: go1.x
       Timeout: 10
