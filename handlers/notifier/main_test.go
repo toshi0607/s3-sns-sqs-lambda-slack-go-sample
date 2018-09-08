@@ -20,6 +20,6 @@ func TestHandler(t *testing.T) {
 	}
 
 	if err := handler(snsEvent); err != nil {
-		t.Error("error!")
+		t.Errorf("error: %s", err)
 	}
 }

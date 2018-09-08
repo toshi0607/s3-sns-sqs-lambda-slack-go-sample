@@ -17,4 +17,9 @@ deploy: build
 	sam deploy \
 		--template-file sam.yml \
 		--stack-name stack-s3-sns-sqs-lambda-slack-go-sample \
-		--capabilities CAPABILITY_IAM
+		--capabilities CAPABILITY_IAM \
+		--parameter-overrides \
+		  WebhookURL=$(WEBHOOK_URL) \
+		  Channel=$(CHANNEL) \
+		  UserName=$(USER_NAME) \
+		  Icon=$(ICON)

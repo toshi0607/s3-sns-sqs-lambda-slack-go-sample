@@ -1,6 +1,15 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-Description: unzip uploaded zip file to another S3 bucket
+Description: Fan out sample using AWS Lambda, SQS, SNS and Go
+Parameters:
+  WebhookURL:
+    Type: String
+  Channel:
+    Type: String
+  UserName:
+    Type: String
+  Icon:
+    Type: String
 Resources:
   WriteExtLambda:
     Type: AWS::Serverless::Function
@@ -46,6 +55,12 @@ Resources:
           Properties:
             Topic:
               Ref: S3FileTopic
+      Environment:
+        Variables:
+          WEBHOOK_URL: !Ref WebhookURL
+          CHANNEL: !Ref Channel
+          USER_NAME: !Ref UserName
+          ICON: !Ref Icon
 
   SQSLambdaSample:
     Type: AWS::S3::Bucket

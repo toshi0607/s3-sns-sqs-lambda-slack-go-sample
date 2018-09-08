@@ -21,7 +21,7 @@ func init() {
 		slack.Config{
 			URL:       os.Getenv("WEBHOOK_URL"),
 			Channel:   os.Getenv("CHANNEL"),
-			Username:  os.Getenv("USERNAME"),
+			Username:  os.Getenv("USER_NAME"),
 			IconEmoji: os.Getenv("ICON"),
 		},
 	)
