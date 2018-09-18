@@ -12,7 +12,7 @@ func TestHandler(t *testing.T) {
 		Records: []events.SNSEventRecord{
 			{
 				SNS: events.SNSEntity{
-					MessageID: uuid.Must(uuid.NewV4()).String(),
+					MessageID: uuid.Must(uuid.NewV4(), nil).String(),
 					Message:   "テストメッセージ",
 				},
 			},
