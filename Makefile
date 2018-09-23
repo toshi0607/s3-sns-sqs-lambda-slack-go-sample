@@ -12,7 +12,7 @@ build-notifier:
 deploy: build
 	sam package \
 		--template-file template.yml \
-		--s3-bucket s3-sns-sqs-lambda-slack-go-sample \
+		--s3-bucket stack-bucket-for-s3-sns-sqs-lambda-slack-go-sample \
 		--output-template-file sam.yml
 	sam deploy \
 		--template-file sam.yml \
@@ -27,5 +27,5 @@ deploy: build
 delete:
 	aws s3 rm s3://sqs-sns-lambda-sample --recursive
 	aws cloudformation delete-stack --stack-name stack-s3-sns-sqs-lambda-slack-go-sample
-	aws s3 rm s3://s3-sns-sqs-lambda-slack-go-sample --recursive
-	aws s3 rb s3://s3-sns-sqs-lambda-slack-go-sample
+	aws s3 rm s3://stack-bucket-for-s3-sns-sqs-lambda-slack-go-sample --recursive
+	aws s3 rb s3://stack-bucket-for-s3-sns-sqs-lambda-slack-go-sample
