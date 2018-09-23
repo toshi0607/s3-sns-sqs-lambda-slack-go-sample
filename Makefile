@@ -23,3 +23,9 @@ deploy: build
 		  Channel=$(CHANNEL) \
 		  UserName=$(USER_NAME) \
 		  Icon=$(ICON)
+
+delete:
+	aws s3 rm s3://sqs-sns-lambda-sample --recursive
+	aws cloudformation delete-stack --stack-name stack-s3-sns-sqs-lambda-slack-go-sample
+	aws s3 rm s3://s3-sns-sqs-lambda-slack-go-sample --recursive
+	aws s3 rb s3://s3-sns-sqs-lambda-slack-go-sample
