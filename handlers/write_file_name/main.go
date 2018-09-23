@@ -7,10 +7,9 @@ import (
 	"net/url"
 	"path/filepath"
 
-	"github.com/pkg/errors"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/pkg/errors"
 )
 
 func main() {
