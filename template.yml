@@ -76,11 +76,14 @@ Resources:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: 20
+      MessageRetentionPeriod: 60
 
   ForFileNameLambdaQueue:
     Type: AWS::SQS::Queue
     Properties:
       VisibilityTimeout: 20
+      MessageRetentionPeriod: 60
+
   SQSPolicy:
     Type: AWS::SQS::QueuePolicy
     Properties:
