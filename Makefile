@@ -1,3 +1,7 @@
+STACK_NAME := stack-s3-sns-sqs-lambda-slack-go-sample
+TEMPLATE_FILE := template.yml
+SAM_FILE := sam.yml
+
 build: build-write-ext build-write-file-name build-notifier
 .PHONY: build
 
@@ -15,25 +19,26 @@ build-notifier:
 
 deploy: build
 	sam package \
-		--template-file template.yml \
-		--s3-bucket stack-bucket-for-s3-sns-sqs-lambda-slack-go-sample \
-		--output-template-file sam.yml
+		--template-file $(TEMPLATE_FILE) \
+		--s3-bucket $(STACK_BUCKET) \
+		--output-template-file $(SAM_FILE)
 	sam deploy \
-		--template-file sam.yml \
-		--stack-name stack-s3-sns-sqs-lambda-slack-go-sample \
+		--template-file $(SAM_FILE) \
+		--stack-name $(STACK_NAME) \
 		--capabilities CAPABILITY_IAM \
 		--parameter-overrides \
 		  WebhookURL=$(WEBHOOK_URL) \
 		  Channel=$(CHANNEL) \
 		  UserName=$(USER_NAME) \
-		  Icon=$(ICON)
+		  Icon=$(ICON) \
+		  FileBucket=$(FILE_BUCKET)
 .PHONY: deploy
 
 delete:
-	aws s3 rm s3://sqs-sns-lambda-sample --recursive
-	aws cloudformation delete-stack --stack-name stack-s3-sns-sqs-lambda-slack-go-sample
-	aws s3 rm s3://stack-bucket-for-s3-sns-sqs-lambda-slack-go-sample --recursive
-	aws s3 rb s3://stack-bucket-for-s3-sns-sqs-lambda-slack-go-sample
+	aws s3 rm "s3://$(FILE_BUCKET)" --recursive
+	aws cloudformation delete-stack --stack-name $(STACK_NAME)
+	aws s3 rm "s3://$(STACK_BUCKET)" --recursive
+	aws s3 rb "s3://$(STACK_BUCKET)"
 .PHONY: delete
 
 test:

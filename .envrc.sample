@@ -1,0 +1,6 @@
+export WEBHOOK_URL=https://hooks.slack.com/services/xxxxxx/yyyyyy
+export CHANNEL=dev
+export USER_NAME=piggy
+export ICON=:piggy:
+export STACK_BUCKET=stack-bucket-for-comp-sample-20180930-toshi
+export FILE_BUCKET=sqs-sns-lambda-sample-20180930-toshi
