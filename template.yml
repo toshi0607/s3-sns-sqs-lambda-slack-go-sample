@@ -10,6 +10,8 @@ Parameters:
     Type: String
   Icon:
     Type: String
+  FileBucket:
+    Type: String
 Resources:
   WriteExtLambda:
     Type: AWS::Serverless::Function
@@ -66,7 +68,7 @@ Resources:
     Type: AWS::S3::Bucket
     DependsOn: SNSTopicPolicy
     Properties:
-      BucketName: sqs-sns-lambda-sample
+      BucketName: !Ref FileBucket
       NotificationConfiguration:
         TopicConfigurations:
         - Topic: !Ref S3FileTopic
@@ -124,6 +126,6 @@ Resources:
             Resource: !Ref S3FileTopic
             Condition:
               ArnLike:
-                aws:SourceArn: !Sub "arn:aws:s3:::sqs-sns-lambda-sample"
+                aws:SourceArn: !Sub "arn:aws:s3:::${FileBucket}"
             Principal:
               AWS: '*'
