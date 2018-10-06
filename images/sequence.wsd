@@ -1,0 +1,50 @@
+@startuml
+
+actor user
+
+participant "S3" as s3
+participant "SNS" as sns
+participant "SQS①" as sqs1
+participant "Lambda①" as lambda1
+participant "SQS②" as sqs2
+participant "Lambda②" as lambda2
+participant "Lambda③" as lambda3
+participant "Slack" as slack
+
+user -> s3 : upload file
+activate s3
+s3 ->> sns : s3:ObjectCreated:Put event
+activate sns
+s3 --> user : ack
+deactivate s3
+
+sns ->> sqs1 : notify
+activate sqs1
+sqs1 -> lambda1 : invoke w/message
+activate lambda1
+lambda1 --> sqs1 : ack
+deactivate sqs1
+lambda1 -> lambda1 : proc1
+deactivate lambda1
+
+sns ->> sqs2 : notify
+activate sqs2
+sqs2 -> lambda2 : invoke w/message
+activate lambda2
+lambda2 --> sqs2 : ack
+deactivate sqs2
+
+lambda2 -> lambda2 : proc2
+deactivate lambda2
+
+sns ->> lambda3 : notify
+deactivate sns
+activate lambda3
+lambda3 -> slack : post
+activate slack
+slack --> lambda3 : ack
+deactivate lambda3
+slack --> user : show message
+deactivate slack
+
+@enduml
