@@ -48,3 +48,10 @@ In this architecture, Lambdas execute *long polling* to SQS and it's billable. S
 ```
 $ make delete
 ```
+
+## Articles (Japanese)
+
+* [Goで学ぶAWS Lambda（PDF、ePubセット版）](https://toshi0607.booth.pm/items/1034858)
+  * This architecture is explained in detail in this book.
+* [技術書典5で『Goで学ぶAWS Lambda』を出展します #技術書典](http://toshi0607.com/programming/learning-aws-lambda-with-go/)
+* [技術書典5の『Goで学ぶAWS Lambda』の振り返りとフィードバックのお願い #技術書典](http://toshi0607.com/event/review-of-tbf5/)
