@@ -27,6 +27,11 @@ Resources:
           Properties:
             Queue: !GetAtt ForExtLambdaQueue.Arn
             BatchSize: 10
+  WriteExtLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${WriteExtLambda}
+      RetentionInDays: 1
 
   WriteFileNameLambda:
     Type: AWS::Serverless::Function
@@ -42,6 +47,11 @@ Resources:
           Properties:
             Queue: !GetAtt ForFileNameLambdaQueue.Arn
             BatchSize: 10
+  WriteFileNameLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${WriteFileNameLambda}
+      RetentionInDays: 1
 
   NotifierLambda:
     Type: AWS::Serverless::Function
@@ -63,6 +73,11 @@ Resources:
           CHANNEL: !Ref Channel
           USER_NAME: !Ref UserName
           ICON: !Ref Icon
+  NotifierogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${NotifierLambda}
+      RetentionInDays: 1
 
   SQSLambdaSample:
     Type: AWS::S3::Bucket

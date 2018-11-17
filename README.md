@@ -17,6 +17,8 @@ And,
 * install [aws-cli](https://github.com/aws/aws-cli)
 * install [aws-sam-cli](https://github.com/awslabs/aws-sam-cli). Docker is also required. Follow the instruction [here](https://github.com/awslabs/aws-sam-cli#installation).
 * install [direnv](https://github.com/direnv/direnv)
+* install [saw](https://github.com/TylerBrock/saw)
+  * you can watch CloudWatch logs on your terminal
 * set environment variables to [.envrc.sample](./.envrc.sample) and remove *.sample*.
   * *WEBHOOK_URL* Incoming Webhook URL of Slack. You can get URL at [this page](https://api.slack.com/incoming-webhooks).
   * *CHANNEL* where the Lambda③'ll post message in Slack
@@ -35,11 +37,19 @@ $ make deploy
 
 Now, you can check a behavior of this architecture by uploading file to S3.
 
-Logs of Lambdas are shown in CloudWatch Logs.
+```
+$ saw groups
+/aws/lambda/stack-s3-sns-sqs-lambda-slack-go-sa-WriteExtLambda-XXXXXXXXXXXX
+/aws/lambda/stack-s3-sns-sqs-lambda-slack-WriteFileNameLambda-XXXXXXXXXXXX
+/aws/lambda/stack-s3-sns-sqs-lambda-slack-go-sa-NotifierLambda-XXXXXXXXXXXX
 
-* /aws/lambda/stack-s3-sns-sqs-lambda-slack-go-sa-WriteExtLambda-HX XXXXXXXXXXX
-* /aws/lambda/stack-s3-sns-sqs-lambda-slack-WriteFileNameLambda-XXX XXXXXXXXX
-* /aws/lambda/stack-s3-sns-sqs-lambda-slack-go-sa-NotifierLambda-XX XXXXXXXXXX
+$ saw watch /aws/lambda/stack-s3-sns-sqs-lambda-slack-go-sa-WriteExtLambda-XXXXXXXXXXXX &
+$ saw watch /aws/lambda/stack-s3-sns-sqs-lambda-slack-WriteFileNameLambda-XXXXXXXXXXXX &
+$ saw watch /aws/lambda/stack-s3-sns-sqs-lambda-slack-go-sa-NotifierLambda-XXXXXXXXXXXX &
+
+# open another window
+$ aws s3 cp ./README.md "s3://${FILE_BUCKET}"
+```
 
 ### delete
 
