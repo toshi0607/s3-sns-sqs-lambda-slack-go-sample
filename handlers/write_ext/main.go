@@ -20,11 +20,11 @@ const s3PutEvent = "ObjectCreated:Put"
 
 func handler(sqsEvent events.SQSEvent) error {
 	for _, message := range sqsEvent.Records {
-		fn, err := getExtFromMessage(message)
+		ext, err := getExtFromMessage(message)
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Printf("extension of the file is %s", fn)
+		log.Printf("extension of the file is %s", ext)
 	}
 
 	return nil
@@ -44,7 +44,7 @@ func getExtFromMessage(e events.SQSMessage) (string, error) {
 		return "", nil
 	}
 	if err := json.Unmarshal([]byte(snsEvent.Message), &s3event); err != nil {
-		return "", errors.Wrapf(err, "failed to unmarshal: %s", e.Body)
+		return "", errors.Wrapf(err, "failed to unmarshal: %s", snsEvent.Message)
 	}
 	key, err := url.QueryUnescape(s3event.Records[0].S3.Object.Key)
 	if err != nil {

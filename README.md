@@ -2,7 +2,7 @@ s3-sns-sqs-lambda-slack-go-sample
 ====
 
 ## Description
-s3-sns-sqs-lambda-slack-go-sample is a sample implementation of a [*Funout Pattern* of a cloud design pattern](http://aws.clouddesignpattern.org/index.php/CDP:Fanout%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)
+s3-sns-sqs-lambda-slack-go-sample is a sample implementation of a [*Fanout Pattern* of a cloud design pattern](http://aws.clouddesignpattern.org/index.php/CDP:Fanout%E3%83%91%E3%82%BF%E3%83%BC%E3%83%B3)
 
 ![sequence](./images/sequence.png)
 
