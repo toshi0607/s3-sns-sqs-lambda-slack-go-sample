@@ -73,7 +73,7 @@ Resources:
           CHANNEL: !Ref Channel
           USER_NAME: !Ref UserName
           ICON: !Ref Icon
-  NotifierogGroup:
+  NotifierLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub /aws/lambda/${NotifierLambda}

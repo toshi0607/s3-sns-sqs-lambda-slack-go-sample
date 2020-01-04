@@ -20,11 +20,11 @@ func main() {
 
 func handler(sqsEvent events.SQSEvent) error {
 	for _, message := range sqsEvent.Records {
-		ext, err := getFileNameFromMessage(message)
+		fn, err := getFileNameFromMessage(message)
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Printf("name of the file is %s", ext)
+		log.Printf("name of the file is %s", fn)
 	}
 
 	return nil
@@ -44,7 +44,7 @@ func getFileNameFromMessage(e events.SQSMessage) (string, error) {
 		return "", nil
 	}
 	if err := json.Unmarshal([]byte(snsEvent.Message), &s3event); err != nil {
-		return "", errors.Wrapf(err, "failed to unmarshal: %s", e.Body)
+		return "", errors.Wrapf(err, "failed to unmarshal: %s", snsEvent.Message)
 	}
 	key, err := url.QueryUnescape(s3event.Records[0].S3.Object.Key)
 	if err != nil {
